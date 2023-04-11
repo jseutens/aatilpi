@@ -15,9 +15,6 @@ License URI: https://www.gnu.org/licenses/gpl-2.0.html
 if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly
 }
-
-
-
 // Define constants used throughout the plugin
 define( 'AATILPI_PLUGIN_DIR', untrailingslashit( plugin_dir_path( __FILE__ ) ) );
 define( 'AATILPI_PLUGIN_URL', untrailingslashit( plugin_dir_url( __FILE__ ) ) );
@@ -55,7 +52,7 @@ function aatilpi_active_plugins_contains( $name ) {
 // warning if Business Profile plugin is active
 function aatilpi_show_warning_message() {
     ?>
-    <div class="notice notice-warning is-dismissible">
+    <div class="notice notice-warning">
         <p><?php _e('The Location Profile Information plugin is not compatible with the Business Profile plugin. Please deactivate the Business Profile plugin to use the Location Profile Information plugin.', AATILPI_TEXTDOMAIN); ?></p>
     </div>
     <?php
@@ -77,11 +74,14 @@ register_deactivation_hook( __FILE__, 'aatilpi_deactivate' );
 function aatilpi_deactivate() {
   // Deactivation code here
 }
+// include admin css
+wp_enqueue_style('aatilpi_custom_wp_admin_css', plugins_url('assets/css/admin-styles.css', __FILE__));
 // Include aatipli-functions.php
 require_once(AATILPI_PLUGIN_DIR . '/includes/shared/aatipli-functions.php');
 // Include aatipli-shortcode.php
 require_once(AATILPI_PLUGIN_DIR . '/includes/shared/aatipli-shortcode.php');
 // Load plugin settings pages
+require_once( AATILPI_PLUGIN_DIR . '/includes/shared/aatilpi-settings-fields.php' );
 require_once( AATILPI_PLUGIN_DIR . '/includes/shared/aatilpi-settings-permalink.php' );
 require_once( AATILPI_PLUGIN_DIR . '/includes/shared/aatilpi-settings-extrafields.php' );
 require_once( AATILPI_PLUGIN_DIR . '/includes/admin/aatilpi-menu.php');

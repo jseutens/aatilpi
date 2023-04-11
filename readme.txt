@@ -2,17 +2,17 @@
 Contributors: jseutens
 Tags: location, profile, information, contact
 Requires at least: 5.8
-Tested up to: 5.8
-Requires PHP: 7.4
+Tested up to: 6.2
+Requires PHP: 8.1
 Stable tag: 1.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
-A custom WordPress plugin for displaying location profile information for businesses with support for multiple locations. The plugin uses a Gutenberg block to display the contact cards on your web pages.
+A custom WordPress plugin for displaying location profile information for businesses with support for multiple locations. The plugin uses a shortcode to display the contact cards on your web pages.
 
 == Description ==
 
-The Location Profile Information plugin allows you to manage and display multiple business locations on your WordPress site. The plugin provides a settings page to manage the location information, such as name, address, phone, and email. Each location can be displayed on your site using a Gutenberg block, which allows you to select the desired location for each contact card.
+The Location Profile Information plugin allows you to manage and display multiple business locations on your WordPress site. The plugin provides a settings page to manage the location information, such as name, address, phone, and email. Each location can be displayed on your site using a shortcode, which allows you to select the desired location for each contact card.
 
 == Installation ==
 
@@ -24,11 +24,11 @@ The Location Profile Information plugin allows you to manage and display multipl
 
 = How do I add a new location? =
 
-To add a new location, go to the "Settings" menu in the WordPress dashboard, and click on "Location Profile Information". Click on the "Add Location" button and fill in the fields for the new location, then click "Save Changes".
+To add a new location, click on "Locations". Click on the "Add New" button and fill in the fields for the new location, then click "Publish".
 
 = How do I display the location profile information on a page or post? =
 
-Use the provided Gutenberg block called "Location Profile Information" to display the location profile information on your page or post. After adding the block, select the desired location from the dropdown menu to display the contact card for that location.
+Please check the included Support page in the menu.
 
 == Changelog ==
 

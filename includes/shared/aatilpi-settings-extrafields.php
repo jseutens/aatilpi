@@ -13,52 +13,113 @@ function aatilpi_custom_field_meta_box() {
 add_action('add_meta_boxes', 'aatilpi_custom_field_meta_box');
 
 // add fields
+// address,gps_coords,phone,cellphone,fax,whatsapp,e-mail,ordering_link,VAT,prof_id,bank_account,bank_bicswift,facebook,twitter,instagram
+// arr_address,arr_gps_coords,arr_phone,arr_cellphone,arr_fax,arr_whatsapp,arr_e-mail,arr_ordering,arr_VAT,arr_prof_id,arr_bank_account,arr_bank_bicswift,arr_facebook,arr_twitter,arr_instagram
+// ARRAY [NAME,FIELD,TYPE,ORDER,VISUAL]
+//$arr_address[__('Address', AATILPI_TEXTDOMAIN),'aatilpi_address','textarea',1,1]
+//$aatilpi_fields_array = ['arr_address','arr_gps_coords','arr_phone','arr_cellphone','arr_fax','arr_whatsapp','arr_e-mail','arr_ordering','arr_VAT','arr_prof_id','arr_bank_account','arr_bank_bicswift','arr_facebook','arr_twitter','arr_instagram'];
+
+// each field has a set of items , the field value (url,phone number , adress ,etc), a text name for the field (like "contact us over Whatsapp" instead og the whatsapp number of the field value) and the type of field 
+// example Phone array : +3224272700,text,+322272700,text,5,yes
+// 
+// 
+// 
+
+
+
 function aatilpi_custom_field_meta_box_callback($post) {
+//$aatilpi_fields_array = ['arr_address','arr_gps_coords','arr_phone','arr_cellphone','arr_fax','arr_whatsapp','arr_e-mail','arr_ordering','arr_VAT','arr_prof_id','arr_bank_account','arr_bank_bicswift','arr_facebook','arr_twitter','arr_instagram'];
+	$aatilpi_fields_array = AATILPI_FIELDS_ARRAY;
 	wp_nonce_field('aatilpi_custom_field_meta_box', 'aatilpi_custom_field_meta_box_nonce');
-	$custom_field_value = get_post_meta($post->ID, '_aatilpi_custom_field_key', true);
-	$order_field_value = get_post_meta($post->ID, '_aatilpi_order_field_key', true);
-	$yes_no_field_value = get_post_meta($post->ID, '_aatilpi_yes_no_field_key', true);
-
-echo '<table class="aatilpi-meta-box-fields">';
-echo '<thead>';
-echo '<tr>';
-echo '<th>Name</th>';
-echo '<th> Order</th>';
-echo '<th>Visual</th>';
-echo '</tr>';
-echo '</thead>';
-echo '<tbody>';
-echo '<tr>';
-
-// Celphone field
-echo '<td>';
-echo '<label for="aatilpi_custom_field">Cellphone:</label>';
-echo '<input type="text" id="aatilpi_custom_field" name="aatilpi_custom_field" value="' . esc_attr($custom_field_value) . '" size="50" />';
-echo '</td>';
-
-// Cellphone Order field
-echo '<td>';
-echo '<input type="number" id="aatilpi_order_field" name="aatilpi_order_field" value="' . esc_attr($order_field_value) . '" size="5" />';
-echo '</td>';
-
-// Cellphone Yes/No select box
-echo '<td>';
-echo '<select id="aatilpi_yes_no_field" name="aatilpi_yes_no_field">';
-echo '<option value="yes"' . ($yes_no_field_value === 'yes' ? ' selected' : '') . '>Yes</option>';
-echo '<option value="no"' . ($yes_no_field_value === 'no' ? ' selected' : '') . '>No</option>';
-echo '</select>';
-echo '</td>';
-
-echo '</tr>';
-echo '</tbody>';
-echo '</table>'; // Close the wrapper table
-
+	$visual_options = array('yes' => 'Yes', 'no' => 'No');	
+	
+?>
+<table class="aatilpi-table">
+    <thead>
+        <tr>
+			<th><h3><?php _e('Field', AATILPI_TEXTDOMAIN); ?></h3></th>
+			<th><h3><?php _e('Order', AATILPI_TEXTDOMAIN); ?></h3></th>
+			<th><h3><?php _e('Visual', AATILPI_TEXTDOMAIN); ?></h3></th>
+        </tr>
+    </thead>
+	<tbody>
+ <?php
+//array diplay
+ foreach ($aatilpi_fields_array as $field) {
+	// empty all fields that can contain custom data 
+	$custom_field_value='';
+	$custom_fieldname_value='';
+	// get the fixed field values from the array 
+	// ARRAY [NAME,FIELD,TYPE,ORDER,VISUAL]
+	$custom_field_name=$field[0];
+	$custom_field_valuename=$field[1]; //value of the field
+	$custom_field_type=$field[2]; // type of the field
+    $order_field_default = $field[3];
+    $yes_no_field_default = $field[4];
+	// get values from the db
+	$custom_field_value=get_post_meta($post->ID, $custom_field_valuename, true);
+	$custom_fieldname_value=get_post_meta($post->ID, $custom_field_valuename.'_name', true);
+	$order_field_value=get_post_meta($post->ID,$custom_field_valuename.'_order', true);
+	$yes_no_field_value=get_post_meta($post->ID, $custom_field_valuename.'_visual', true);
+    if (empty($custom_field_value)) {
+        $custom_field_value = '';
+    }
+    if (empty($custom_fieldname_value)) {
+     //   $custom_fieldname_value = '';
+    }
+    if (empty($order_field_value)) {
+        $order_field_value = $order_field_default;
+    }
+    if (empty($yes_no_field_value)) {
+        $yes_no_field_value = $yes_no_field_default;
+    }
+ ?>
+          <tr>
+            <td>
+			<?php 
+			if ($custom_field_type == "text") {
+				echo aatilpi_text_field($custom_field_valuename, $custom_field_valuename,$custom_field_name, $custom_field_value , 25); 
+				echo aatilpi_text_field($custom_field_valuename.'_name', $custom_field_valuename.'_name', '', $custom_fieldname_value , 25);
+			}
+			if ($custom_field_type == "textarea") {
+				echo aatilpi_textarea_field($custom_field_valuename, $custom_field_valuename, $custom_field_name, $custom_field_value, 4, 40);		
+				echo aatilpi_text_field($custom_field_valuename.'_name', $custom_field_valuename.'_name', '', $custom_fieldname_value , 50);
+			}
+			if ($custom_field_type == "number") {
+				echo aatilpi_number_field($custom_field_valuename, $custom_field_valuename, $custom_field_name, $custom_field_value , 25);
+				echo aatilpi_text_field($custom_field_valuename.'_name', $custom_field_valuename.'_name', '', $custom_fieldname_value , 25);
+			}
+			?>
+			</td>
+            <td>
+			<?php
+			// Order
+				echo aatilpi_number_field($custom_field_valuename.'_order',$custom_field_valuename.'_order', '', $order_field_value , 5);
+			?>
+			</td>
+            <td>	
+			<?php
+			// Visual
+				echo aatilpi_select_field($custom_field_valuename.'_visual',$custom_field_valuename.'_visual', '', $yes_no_field_value, $visual_options);
+			?>
+			</td>
+        </tr>
+ <?php
+//array diplay end
+}
+ ?>  
+  
+<?php
+ // end loop of fields 
+?>
+    </tbody>
+</table>
+<?php
 }
 
 
 //saving the stuff
 function aatilpi_custom_field_save_postdata($post_id, $post) {
-//    error_log('AATILPI NONCE: ' . print_r($_POST['aatilpi_custom_field_meta_box_nonce'], true));
     if (!isset($_POST['aatilpi_custom_field_meta_box_nonce'])) {
         return;
     }
@@ -75,24 +136,39 @@ function aatilpi_custom_field_save_postdata($post_id, $post) {
         return;
     }
 
-    // Save custom field data
-    if (isset($_POST['aatilpi_custom_field'])) {
-        $custom_field_data = sanitize_text_field($_POST['aatilpi_custom_field']);
-//        error_log('AATILPI Field Data: ' . print_r($custom_field_data, true));
-        update_post_meta($post_id, '_aatilpi_custom_field_key', $custom_field_data);
-    }
+    $aatilpi_fields_array = AATILPI_FIELDS_ARRAY;
 
-    // Save order field data
-    if (isset($_POST['aatilpi_order_field'])) {
-        $order_field_data = intval($_POST['aatilpi_order_field']);
-//        error_log('AATILPI Order Field Data: ' . print_r($order_field_data, true));
-        update_post_meta($post_id, '_aatilpi_order_field_key', $order_field_data);
-    }
-// Save Yes/No field data
-if (isset($_POST['aatilpi_yes_no_field'])) {
-    $yes_no_field_data = sanitize_key($_POST['aatilpi_yes_no_field']);
-    update_post_meta($post_id, '_aatilpi_yes_no_field_key', $yes_no_field_data);
-}
+    foreach ($aatilpi_fields_array as $field) {
+        $custom_field_valuename = $field[1];
+		$custom_field_type=$field[2];
+        // Save custom field data
 
+		if (isset($_POST[$custom_field_valuename])) {
+			if ($custom_field_type == "textarea") {
+            	$custom_field_data = sanitize_textarea_field($_POST[$custom_field_valuename]);
+			} else {
+           		$custom_field_data = sanitize_text_field($_POST[$custom_field_valuename]);
+			}	
+            update_post_meta($post_id, $custom_field_valuename , $custom_field_data);
+        }
+
+        // Save custom field name data
+        if (isset($_POST[$custom_field_valuename . '_name'])) {
+            $custom_fieldname_data = sanitize_text_field($_POST[$custom_field_valuename . '_name']);
+            update_post_meta($post_id, $custom_field_valuename . '_name', $custom_fieldname_data);
+        }
+
+        // Save order field data
+        if (isset($_POST[$custom_field_valuename . '_order'])) {
+            $order_field_data = intval($_POST[$custom_field_valuename . '_order']);
+            update_post_meta($post_id, $custom_field_valuename . '_order', $order_field_data);
+        }
+
+        // Save visual field data
+        if (isset($_POST[$custom_field_valuename . '_visual'])) {
+            $visual_field_data = sanitize_key($_POST[$custom_field_valuename . '_visual']);
+            update_post_meta($post_id, $custom_field_valuename . '_visual', $visual_field_data);
+        }
+    }
 }
 add_action('save_post_aatilpi_location', 'aatilpi_custom_field_save_postdata', 10, 2);

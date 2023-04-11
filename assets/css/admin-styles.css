@@ -1,0 +1,27 @@
+.aatilpi-table {
+  border-collapse: collapse;
+  width: 100%;
+}
+ .aatilpi-table label {
+  vertical-align: top;
+  width: 25ch;
+  display: inline-block;
+}
+ .aatilpi-table input {
+  vertical-align: top;
+}
+.aatilpi-table th,
+.aatilpi-table td {
+  border: 1px solid #ccc;
+  padding: 10px;
+  text-align: left;
+}
+
+.aatilpi-table th {
+  background-color: #f2f2f2;
+  font-weight: bold;
+}
+
+.aatilpi-table tbody tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
