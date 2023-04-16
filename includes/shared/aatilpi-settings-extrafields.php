@@ -12,20 +12,6 @@ function aatilpi_custom_field_meta_box() {
 }
 add_action('add_meta_boxes', 'aatilpi_custom_field_meta_box');
 
-// add fields
-// address,gps_coords,phone,cellphone,fax,whatsapp,e-mail,ordering_link,VAT,prof_id,bank_account,bank_bicswift,facebook,twitter,instagram
-// arr_address,arr_gps_coords,arr_phone,arr_cellphone,arr_fax,arr_whatsapp,arr_e-mail,arr_ordering,arr_VAT,arr_prof_id,arr_bank_account,arr_bank_bicswift,arr_facebook,arr_twitter,arr_instagram
-// ARRAY [NAME,FIELD,TYPE,ORDER,VISUAL]
-//$arr_address[__('Address', AATILPI_TEXTDOMAIN),'aatilpi_address','textarea',1,1]
-//$aatilpi_fields_array = ['arr_address','arr_gps_coords','arr_phone','arr_cellphone','arr_fax','arr_whatsapp','arr_e-mail','arr_ordering','arr_VAT','arr_prof_id','arr_bank_account','arr_bank_bicswift','arr_facebook','arr_twitter','arr_instagram'];
-
-// each field has a set of items , the field value (url,phone number , adress ,etc), a text name for the field (like "contact us over Whatsapp" instead og the whatsapp number of the field value) and the type of field 
-// example Phone array : +3224272700,text,+322272700,text,5,yes
-// 
-// 
-// 
-
-
 
 function aatilpi_custom_field_meta_box_callback($post) {
 //$aatilpi_fields_array = ['arr_address','arr_gps_coords','arr_phone','arr_cellphone','arr_fax','arr_whatsapp','arr_e-mail','arr_ordering','arr_VAT','arr_prof_id','arr_bank_account','arr_bank_bicswift','arr_facebook','arr_twitter','arr_instagram'];
@@ -50,12 +36,13 @@ function aatilpi_custom_field_meta_box_callback($post) {
 	$custom_field_value='';
 	$custom_fieldname_value='';
 	// get the fixed field values from the array 
-	// ARRAY [NAME,FIELD,TYPE,ORDER,VISUAL]
+	// ARRAY [NAME,FIELD,TYPE,ORDER,VISUAL,DESCRIPTION]
 	$custom_field_name=$field[0];
 	$custom_field_valuename=$field[1]; //value of the field
 	$custom_field_type=$field[2]; // type of the field
     $order_field_default = $field[3];
     $yes_no_field_default = $field[4];
+    $description_default = $field[5];
 	// get values from the db
 	$custom_field_value=get_post_meta($post->ID, $custom_field_valuename, true);
 	$custom_fieldname_value=get_post_meta($post->ID, $custom_field_valuename.'_name', true);
@@ -89,6 +76,7 @@ function aatilpi_custom_field_meta_box_callback($post) {
 				echo aatilpi_number_field($custom_field_valuename, $custom_field_valuename, $custom_field_name, $custom_field_value , 25);
 				echo aatilpi_text_field($custom_field_valuename.'_name', $custom_field_valuename.'_name', '', $custom_fieldname_value , 25);
 			}
+            echo $description_default;
 			?>
 			</td>
             <td>
