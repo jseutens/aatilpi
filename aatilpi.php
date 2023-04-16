@@ -81,7 +81,7 @@ require_once(AATILPI_PLUGIN_DIR . '/includes/shared/aatipli-functions.php');
 // Include aatipli-shortcode.php
 require_once(AATILPI_PLUGIN_DIR . '/includes/shared/aatipli-shortcode.php');
 // Load plugin settings pages
-require_once( AATILPI_PLUGIN_DIR . '/includes/shared/aatilpi-settings-fields.php' );
+require_once( AATILPI_PLUGIN_DIR . '/includes/shared/aatipli-settings-fields.php' );
 require_once( AATILPI_PLUGIN_DIR . '/includes/shared/aatilpi-settings-permalink.php' );
 require_once( AATILPI_PLUGIN_DIR . '/includes/shared/aatilpi-settings-extrafields.php' );
 require_once( AATILPI_PLUGIN_DIR . '/includes/admin/aatilpi-menu.php');
