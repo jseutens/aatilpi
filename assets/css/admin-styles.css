@@ -2,18 +2,18 @@
   border-collapse: collapse;
   width: 100%;
 }
- .aatilpi-table label {
+.aatilpi-table label {
   vertical-align: top;
   width: 25ch;
   display: inline-block;
 }
- .aatilpi-table input {
+.aatilpi-table input {
   vertical-align: top;
 }
 .aatilpi-table th,
 .aatilpi-table td {
   border: 1px solid #ccc;
-  padding: 10px;
+  padding: .5rem;
   text-align: left;
 }
 
@@ -22,6 +22,15 @@
   font-weight: bold;
 }
 
+.aatilpi-table-h2 {
+  text-align: center;
+  font-size: larger;
+}
+
 .aatilpi-table tbody tr:nth-child(even) {
   background-color: #f2f2f2;
 }
+.aatilpi-description{
+  font-size: x-small;
+}
+

@@ -22,9 +22,62 @@ function aatilpi_location_shortcode($atts) {
     if (!$location || $location->post_type !== 'aatilpi_location') {
         return '<p>' . __('The specified location does not exist.', AATILPI_TEXTDOMAIN) . '</p>';
     }
-	$output_html = $location->post_title;
+//	$output_html = $location->post_title;
     // Render the location 
+// list the values in the database for this location with the AATILPI_FIELDS_ARRAY and order the by the values of the third field 
+// 1. Retrieve the fields array
+$fields_array = AATILPI_FIELDS_ARRAY;
+//ARRAY [NAME,FIELD,TYPE,ORDER,VISUAL,DESCRIPTION]
+// 2. Fetch metadata for each field and store in a new array
+$metadata_array = array();
+foreach ($fields_array as $field) {
+    $field_key = $field[1]; // Field key
+    $order_key = $field_key . '_order'; // Order field key
+    $name_key = $field_key . '_name'; // Custom field value name
+    $visual_key = $field_key . '_visual'; // Custom field value name
+    $field_value = get_post_meta($location_id, $field_key, true);
+    $order_value = get_post_meta($location_id, $order_key, true);
+    $name_value = get_post_meta($location_id, $name_key, true);
+    $visual_value = get_post_meta($location_id, $visual_key, true);
+
+    // 3. Store the fetched values in a new array
+    $metadata_array[] = array(
+//ARRAY [the array,FIELD,content of the field,ORDER,VISUAL,display content of the field]
+        'field_data' => $field,
+		'field_key' => $field_key,
+        'field_value' => $field_value,
+        'order_value' => $order_value,
+        'visual_value' => $visual_value,
+        'name_value' => $name_value 
+    );
+}
+// 4. Sort the new array by the third field's value
+usort($metadata_array, function ($a, $b) {
+    return $a['order_value'] <=> $b['order_value'];
+});
+// 5. Display the sorted data
+$output_html = '';
+foreach ($metadata_array as $metadata) {
+	//ARRAY [NAME,FIELD,TYPE,ORDER,VISUAL,DESCRIPTION]
+    $field_data = $metadata['field_data'];
+	$field_key = $metadata['field_key'];
+    $field_value = $metadata['field_value'];
+    $order_value = $metadata['order_value'];
+    $visual_value = $metadata['visual_value'];
+    $name_value = $metadata['name_value'];
+    $output_html .= "NAME: " . $field_data[0] . "<br>" .
+    "FIELD: " . $field_data[1] . "<br>" .
+    "TYPE: " . $field_data[2] . "<br>" .
+    "ORDER: " . $field_data[3] . "<br>" .
+    "VISUAL: " . $field_data[4] . "<br>" .
+    "DESCRIPTION: " . $field_data[5] . "<br>" .
+    "real ORDER: " . $order_value . "<br>" .
+    "real VISUAL: " . $visual_value . "<br>" .
+    "Content: " . $field_value . "<br>" .		
+    "display value: " . $name_value . "<br>" .
+    "-----------------------<br>";
+    $output_html .= output_html_based_on_field($metadata_array);
+}
     return $output_html;
 }
-
 add_shortcode('contact-card', 'aatilpi_location_shortcode');

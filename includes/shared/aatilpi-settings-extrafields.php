@@ -13,26 +13,31 @@ function aatilpi_custom_field_meta_box() {
 add_action('add_meta_boxes', 'aatilpi_custom_field_meta_box');
 
 
-function aatilpi_custom_field_meta_box_callback($post) {
-//$aatilpi_fields_array = ['arr_address','arr_gps_coords','arr_phone','arr_cellphone','arr_fax','arr_whatsapp','arr_e-mail','arr_ordering','arr_VAT','arr_prof_id','arr_bank_account','arr_bank_bicswift','arr_facebook','arr_twitter','arr_instagram'];
-	$aatilpi_fields_array = AATILPI_FIELDS_ARRAY;
-	wp_nonce_field('aatilpi_custom_field_meta_box', 'aatilpi_custom_field_meta_box_nonce');
-	$visual_options = array('yes' => 'Yes', 'no' => 'No');	
-	
-?>
-<table class="aatilpi-table">
+
+// this is the header for each group
+function aatilpi_display_table_header($title) {
+    ?>
     <thead>
         <tr>
-			<th><h3><?php _e('Field', AATILPI_TEXTDOMAIN); ?></h3></th>
-			<th><h3><?php _e('Order', AATILPI_TEXTDOMAIN); ?></h3></th>
-			<th><h3><?php _e('Visual', AATILPI_TEXTDOMAIN); ?></h3></th>
+            <th colspan="4"><h2 class="aatilpi-table-h2"><?php echo $title; ?></h2></th>
+        </tr>
+        <tr>
+            <th><h3><?php _e('Field', AATILPI_TEXTDOMAIN); ?></h3></th>
+            <th><h3><?php _e('Display', AATILPI_TEXTDOMAIN); ?></h3></th>
+            <th><h3><?php _e('Order', AATILPI_TEXTDOMAIN); ?></h3></th>
+            <th><h3><?php _e('Visual', AATILPI_TEXTDOMAIN); ?></h3></th>
         </tr>
     </thead>
-	<tbody>
- <?php
-//array diplay
- foreach ($aatilpi_fields_array as $field) {
+    <?php
+}
+// this is to display all the fields in the group
+function aatilpi_display_fields($title, $aatilpi_display_array ,$post_id_location ) {
+    // call back to the header display
+    aatilpi_display_table_header($title); 
+ //array display
+ foreach ($aatilpi_display_array as $field) {
 	// empty all fields that can contain custom data 
+    $visual_options = array('yes' => 'Yes', 'no' => 'No');	
 	$custom_field_value='';
 	$custom_fieldname_value='';
 	// get the fixed field values from the array 
@@ -44,10 +49,10 @@ function aatilpi_custom_field_meta_box_callback($post) {
     $yes_no_field_default = $field[4];
     $description_default = $field[5];
 	// get values from the db
-	$custom_field_value=get_post_meta($post->ID, $custom_field_valuename, true);
-	$custom_fieldname_value=get_post_meta($post->ID, $custom_field_valuename.'_name', true);
-	$order_field_value=get_post_meta($post->ID,$custom_field_valuename.'_order', true);
-	$yes_no_field_value=get_post_meta($post->ID, $custom_field_valuename.'_visual', true);
+	$custom_field_value=get_post_meta($post_id_location, $custom_field_valuename, true);
+	$custom_fieldname_value=get_post_meta($post_id_location, $custom_field_valuename.'_name', true);
+	$order_field_value=get_post_meta($post_id_location,$custom_field_valuename.'_order', true);
+	$yes_no_field_value=get_post_meta($post_id_location, $custom_field_valuename.'_visual', true);
     if (empty($custom_field_value)) {
         $custom_field_value = '';
     }
@@ -65,26 +70,31 @@ function aatilpi_custom_field_meta_box_callback($post) {
             <td>
 			<?php 
 			if ($custom_field_type == "text") {
-				echo aatilpi_text_field($custom_field_valuename, $custom_field_valuename,$custom_field_name, $custom_field_value , 25); 
-				echo aatilpi_text_field($custom_field_valuename.'_name', $custom_field_valuename.'_name', '', $custom_fieldname_value , 25);
+				echo aatilpi_text_field($custom_field_valuename, $custom_field_valuename,$custom_field_name, $custom_field_value , 40); 
+
 			}
 			if ($custom_field_type == "textarea") {
 				echo aatilpi_textarea_field($custom_field_valuename, $custom_field_valuename, $custom_field_name, $custom_field_value, 4, 40);		
-				echo aatilpi_text_field($custom_field_valuename.'_name', $custom_field_valuename.'_name', '', $custom_fieldname_value , 50);
 			}
 			if ($custom_field_type == "number") {
-				echo aatilpi_number_field($custom_field_valuename, $custom_field_valuename, $custom_field_name, $custom_field_value , 25);
-				echo aatilpi_text_field($custom_field_valuename.'_name', $custom_field_valuename.'_name', '', $custom_fieldname_value , 25);
+				echo aatilpi_number_field($custom_field_valuename, $custom_field_valuename, $custom_field_name, $custom_field_value , 40);
 			}
-            echo $description_default;
+            echo "<div class=\"aatilpi-description\">".$description_default."</div>";
 			?>
 			</td>
+            <td>
+            <?php
+            echo aatilpi_text_field($custom_field_valuename.'_name', $custom_field_valuename.'_name', '', $custom_fieldname_value , 25);
+            ?>
+            </td>
+
             <td>
 			<?php
 			// Order
 				echo aatilpi_number_field($custom_field_valuename.'_order',$custom_field_valuename.'_order', '', $order_field_value , 5);
 			?>
 			</td>
+
             <td>	
 			<?php
 			// Visual
@@ -99,12 +109,26 @@ function aatilpi_custom_field_meta_box_callback($post) {
   
 <?php
  // end loop of fields 
+}
+function aatilpi_custom_field_meta_box_callback($post) {
+	$aatilpi_fields_array = AATILPI_FIELDS_ARRAY;
+	wp_nonce_field('aatilpi_custom_field_meta_box', 'aatilpi_custom_field_meta_box_nonce');
+
+	
 ?>
-    </tbody>
+<div class="aatilpi-description"><?php _e('The first field is the value, the second field is what will be visible for the visitor , leave the second field empty if you want to use the first field also as displayed for the visitor', AATILPI_TEXTDOMAIN); ?></div>
+<table class="aatilpi-table">
+<tbody>
+<?php
+// display all the fields per group
+aatilpi_display_fields(__('Contact Data', AATILPI_TEXTDOMAIN), AATILPI_CONTACT_DATA,$post->ID);
+aatilpi_display_fields(__('Legal Information', AATILPI_TEXTDOMAIN), AATILPI_LEGAL_INFO,$post->ID);
+aatilpi_display_fields(__('Social Media', AATILPI_TEXTDOMAIN), AATILPI_SOCIAL_MEDIA,$post->ID);
+?>
+</tbody>
 </table>
 <?php
 }
-
 
 //saving the stuff
 function aatilpi_custom_field_save_postdata($post_id, $post) {
