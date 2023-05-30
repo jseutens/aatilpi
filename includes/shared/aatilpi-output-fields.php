@@ -1,8 +1,9 @@
 <?php
-function output_html_based_on_field($fields_array) {
-    foreach ($fields_array as $field) {
-        $second_field = $field[1];
-
+//function output_html_based_on_field($fields_array) {
+//   foreach ($fields_array as $field) {
+//       $second_field = $field[1];
+//   }
+//}
         // Output different HTML based on the value of the second field
  
         function output_html_based_on_field($field_key, $field_value) {
@@ -41,8 +42,8 @@ function output_html_based_on_field($fields_array) {
                     // Output for ordering link <a href="https://www.example.com" target="_blank">Link Text</a> 
                     //    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 12">
                     //	<path fill="#36c" d="M6 1h5v5L8.86 3.85 4.7 8 4 7.3l4.15-4.16L6 1ZM2 3h2v1H2v6h6V8h1v2a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1Z"/>
-                      //  </svg>
-                      $link = 'https://www.example.com';
+                    //  </svg>
+                    $link = $field_value;
 
                       $parsed_url = parse_url($link);
                       $domain = $parsed_url['host'];
@@ -165,5 +166,3 @@ function output_html_based_on_field($fields_array) {
             
                 return $output;       
         }
-    }
-}
