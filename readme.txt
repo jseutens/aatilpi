@@ -35,3 +35,11 @@ Please check the included Support page in the menu.
 = 1.0 =
 
     Initial release of the plugin.
+	
+== Screenshots ==
+
+1. ![Screenshot 1](screenshots/screenshot-1.png)
+   Description of the screenshot.
+
+2. ![Screenshot 2](screenshots/screenshot-2.png)
+   Description of the screenshot.
